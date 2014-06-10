@@ -103,6 +103,7 @@ int main()
 {
 	unsigned char buffer[BUFFER_SIZE];
 	unsigned char *tmpbuffer;
+	long fpl;
 
 	printf("\nAnalizando desde %s\n", FILENAME);
 
@@ -117,8 +118,17 @@ int main()
 	printf("longitud: \n");	
 	printMAC_portion(buffer, 36, 40);
 
-	tmpbuffer =  buffer + 190;
+int i= 1;
+tmpbuffer = buffer;
+	while(i <= 10)
+	{
 
+	if(fpl = firstPacketLength(tmpbuffer) <= 60)
+		tmpbuffer =  tmpbuffer + 190;
+	else
+		tmpbuffer = tmpbuffer + (fpl - 60);	
+
+	printf("\nPaquete %d:", i);
 	printf("mac destino: \n");
 	printMAC_portion(tmpbuffer, 0, 16);
 
@@ -127,6 +137,11 @@ int main()
 
 	printf("longitud: \n");	
 	printMAC_portion(tmpbuffer, 36, 40);
+
+	i++;
+
+	}
+
 
 	return 0;
 }
