@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#define FILENAME "llc_file"
-#define BUFFER_SIZE 4160
+#define FILENAME "CARAMBA"
+#define BUFFER_SIZE 7
 
 
 unsigned short getPacketLength(unsigned char *MAC_portion)
@@ -11,22 +11,10 @@ unsigned short getPacketLength(unsigned char *MAC_portion)
 	return length;
 } 
 
-void getMAC_portion(unsigned char *MAC_portion)
-{
-	int i;
-	FILE *fp;
-
-	fp = fopen(FILENAME, "r");
-	
-	fread(MAC_portion, sizeof(unsigned char), 12, fp);	//Needs error validation
-
-	close(fp);
-}
-
 void printMAC_portion(unsigned char * MAC_portion)
 {
 	int i = 0;
-	while(i < 12)
+	while(i < 7)
 	{
 		printf("%02X ", MAC_portion[i]);
 		i++;
