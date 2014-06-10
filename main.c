@@ -4,6 +4,8 @@
 #define FILENAME "llc_file"
 #define BUFFER_SIZE 4160
 
+#define MAC_FORMAT "%02X:%02X:%02X:%02X:%02X:%02X"
+
 unsigned short getPacketLength(unsigned char *MAC_portion)
 {
 	unsigned short length;
@@ -13,10 +15,10 @@ unsigned short getPacketLength(unsigned char *MAC_portion)
 	return length;
 } 
 
-void printMAC_portion(unsigned char * MAC_portion)
+void printMAC_portion(unsigned char * MAC_portion, int a, int b)
 {
-	int i = 0;
-	while(i < 42)
+	int i = a;
+	while(i <= b)
 	{
 		printf("%c", MAC_portion[i]);
 		i++;
@@ -38,7 +40,6 @@ void file_into_buffer(unsigned char * buffer)
 
 long firstPacketLength(unsigned char * buffer)
 {
-	unsigned char * packet;
 	unsigned long length;
 
 	unsigned long tmplong1, tmplong2;
@@ -65,6 +66,20 @@ long firstPacketLength(unsigned char * buffer)
 	return length;
 }
 
+unsigned char * parse_dMAC(unsigned char *buffer)
+{
+	int i = 1;
+	unsigned char *mac = (unsigned char *) malloc(12);
+	mac[12] = 0x00;
+	while(i < 13)
+		if(i % 3 == 0)
+			mac[i] = ':';
+		else
+			mac[i] = buffer[i];
+
+	return mac;
+}
+
 
 int main()
 {
@@ -74,9 +89,14 @@ int main()
 
 	file_into_buffer(buffer);
 
-	printMAC_portion(buffer);
+	printf("mac destino: \n");
+	printMAC_portion(buffer, 0, 16);
 
-	long len = firstPacketLength(buffer);
+	printf("mac origen: \n");
+	printMAC_portion(buffer, 18, 35);
+
+	printf("longitud: \n");	
+	printMAC_portion(buffer, 36, 40);
 
 	return 0;
 }
