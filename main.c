@@ -98,6 +98,30 @@ unsigned char * chopFirstPacket(unsigned char *buffer)
 	}		
 }
 
+void printPacket(unsigned char *buffer)
+{
+	printf("mac destino: ");
+	printMAC_portion(buffer, 0, 16);
+
+	printf("mac origen: ");
+	printMAC_portion(buffer, 18, 35);
+
+	printf("\n");
+
+	printf("longitud: ");	
+	printMAC_portion(buffer, 36, 40);
+
+	printf("DSAP: ");
+	printMAC_portion(buffer, 42, 43);
+
+	printf("SSAP: ");
+	printMAC_portion(buffer, 45, 46);
+
+	printf("Control: ");
+	printMAC_portion(buffer, 50, 51);
+
+}
+
 
 int main()
 {
@@ -109,18 +133,12 @@ int main()
 
 	file_into_buffer(buffer);
 
-	printf("mac destino: \n");
-	printMAC_portion(buffer, 0, 16);
+	
+	int i= 1;
+	tmpbuffer = buffer;
 
-	printf("mac origen: \n");
-	printMAC_portion(buffer, 18, 35);
-
-	printf("longitud: \n");	
-	printMAC_portion(buffer, 36, 40);
-
-int i= 1;
-tmpbuffer = buffer;
-	while(i <= 10)
+	printPacket(tmpbuffer);
+	while(i <= 2)
 	{
 
 	if(fpl = firstPacketLength(tmpbuffer) <= 60)
@@ -128,16 +146,8 @@ tmpbuffer = buffer;
 	else
 		tmpbuffer = tmpbuffer + (fpl - 60);	
 
-	printf("\nPaquete %d:", i);
-	printf("mac destino: \n");
-	printMAC_portion(tmpbuffer, 0, 16);
 
-	printf("mac origen: \n");
-	printMAC_portion(tmpbuffer, 18, 35);
-
-	printf("longitud: \n");	
-	printMAC_portion(tmpbuffer, 36, 40);
-
+	printPacket(tmpbuffer);
 	i++;
 
 	}
