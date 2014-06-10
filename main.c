@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>		//malloc()
+#include <string.h>		//memset()
 
 #define FILENAME "llc_file"
 #define BUFFER_SIZE 4160
@@ -80,10 +81,28 @@ unsigned char * parse_dMAC(unsigned char *buffer)
 	return mac;
 }
 
+unsigned char * chopFirstPacket(unsigned char *buffer)
+{
+	if(firstPacketLength(buffer) <=60)
+	{
+		memset(buffer, 0x00, 60);
+
+		return &buffer[60];
+	}
+		
+	else
+	{
+		//ya veremos
+		printf("\n:(\n");
+		return buffer;
+	}		
+}
+
 
 int main()
 {
 	unsigned char buffer[BUFFER_SIZE];
+	unsigned char *tmpbuffer;
 
 	printf("\nAnalizando desde %s\n", FILENAME);
 
@@ -97,6 +116,17 @@ int main()
 
 	printf("longitud: \n");	
 	printMAC_portion(buffer, 36, 40);
+
+	tmpbuffer =  buffer + 190;
+
+	printf("mac destino: \n");
+	printMAC_portion(tmpbuffer, 0, 16);
+
+	printf("mac origen: \n");
+	printMAC_portion(tmpbuffer, 18, 35);
+
+	printf("longitud: \n");	
+	printMAC_portion(tmpbuffer, 36, 40);
 
 	return 0;
 }
